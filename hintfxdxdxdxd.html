@@ -103,6 +103,8 @@
   </div>
 </div>
 
+<script src="submission-config.js"></script>
+<script src="submission-logger.js"></script>
 <script>
   var ACCEPTED = ["nescafe", "nescaf\u00e9"];
 
@@ -112,6 +114,7 @@
     document.getElementById('team-tag').textContent = 'Clue for ' + name;
     document.getElementById('entry-step').style.display = 'none';
     document.getElementById('question-step').style.display = 'block';
+    logTreasureHuntEvent({ event: 'hint_opened', teamName: name, hint: 'Hint F' });
   };
 
   function normalize(str){
@@ -125,6 +128,8 @@
     var correct = ACCEPTED.some(function(a){ return norm.indexOf(normalize(a)) !== -1; });
 
     if(!raw.trim()){ return; }
+
+    logTreasureHuntEvent({ event: 'answer_submitted', teamName: document.getElementById('team-name').value.trim(), hint: 'Hint F', answer: raw.trim(), correct: correct });
 
     if(correct){
       fb.className = 'feedback show correct';
