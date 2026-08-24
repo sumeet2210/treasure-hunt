@@ -1,6 +1,6 @@
 # Submission logging setup
 
-GitHub Pages cannot write to a `.doc`/`.docx` file because it only serves static files. This project therefore sends events to a Google Apps Script web app, which appends them to a private Google Doc.
+GitHub Pages cannot write to a `.doc`/`.docx` file because it only serves static files. This project therefore sends correct answer submissions to a Google Apps Script web app, which appends them to a private Google Doc. Opening a hint or submitting a wrong answer is not recorded.
 
 1. Open [Google Apps Script](https://script.google.com/) and create a new project.
 2. Replace its `Code.gs` with the contents of `google-apps-script/Code.gs` from this repository.

@@ -13,6 +13,11 @@
   }
 
   window.logTreasureHuntEvent = function (details) {
+    // Only successful answers belong in the submission document.
+    if (details.event !== "answer_submitted" || details.correct !== true) {
+      return Promise.resolve(false);
+    }
+
     var url = endpoint();
     if (!url) {
       console.warn("Submission logging is not configured. Set TREASURE_HUNT_SUBMISSION_URL in submission-config.js.");

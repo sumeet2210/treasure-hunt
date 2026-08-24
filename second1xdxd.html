@@ -114,7 +114,6 @@
     document.getElementById('team-tag').textContent = 'Clue for ' + name;
     document.getElementById('entry-step').style.display = 'none';
     document.getElementById('question-step').style.display = 'block';
-    logTreasureHuntEvent({ event: 'hint_opened', teamName: name, hint: 'Second Hint' });
   };
 
   function normalize(str){
@@ -129,9 +128,8 @@
 
     if(!raw.trim()){ return; }
 
-    logTreasureHuntEvent({ event: 'answer_submitted', teamName: document.getElementById('team-name').value.trim(), hint: 'Second Hint', answer: raw.trim(), correct: correct });
-
     if(correct){
+      logTreasureHuntEvent({ event: 'answer_submitted', teamName: document.getElementById('team-name').value.trim(), hint: 'Second Hint', answer: raw.trim(), correct: true });
       fb.className = 'feedback show correct';
       fb.innerHTML = 'ACCESS GRANTED';
     } else {

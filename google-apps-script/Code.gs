@@ -1,9 +1,20 @@
 var DOCUMENT_TITLE = 'Treasure Hunt Submissions';
+var ACCEPTED_ANSWERS = {
+  'First Hint': ['management', 'management department', 'management block', 'school of management', 'department of management'],
+  'Second Hint': ['taaza tiffins', 'taaza', 'tiffins', 'taza tiffins'],
+  'Hint D': ["domino's", 'dominos', 'domino'],
+  'Hint E': ['country oven', 'countryoven'],
+  'Hint F': ['nescafe', 'nescafé'],
+  'Hint G': ['stadium', 'institute stadium', 'finish', 'base']
+};
 
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents || '{}');
     validate_(data);
+    if (!isCorrectAnswer_(data.hint, data.answer)) {
+      return response_({ ok: true, recorded: false });
+    }
 
     var lock = LockService.getScriptLock();
     lock.waitLock(10000);
@@ -15,15 +26,9 @@ function doPost(e) {
       var doc = getDocument_();
       var body = doc.getBody();
       var timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm:ss z');
-      var result = data.correct === true ? 'CORRECT' : data.correct === false ? 'WRONG' : '—';
-
       body.appendParagraph(timestamp + ' | ' + clean_(data.teamName) + ' | ' + clean_(data.hint))
         .setHeading(DocumentApp.ParagraphHeading.HEADING3);
-      body.appendParagraph(
-        'Event: ' + clean_(data.event) + '\n' +
-        'Answer: ' + (clean_(data.answer) || '—') + '\n' +
-        'Result: ' + result
-      );
+      body.appendParagraph('Answer: ' + clean_(data.answer));
       body.appendHorizontalRule();
       doc.saveAndClose();
 
@@ -74,12 +79,27 @@ function alreadyRecorded_(eventId) {
 }
 
 function validate_(data) {
-  if (!data.eventId || !data.teamName || !data.hint || !data.event) {
+  if (!data.eventId || !data.teamName || !data.hint || !data.answer) {
     throw new Error('Missing required submission fields.');
+  }
+  if (data.event !== 'answer_submitted' || data.correct !== true) {
+    throw new Error('Only correct answer submissions are accepted.');
   }
   if (String(data.teamName).length > 100 || String(data.answer || '').length > 500) {
     throw new Error('Submission is too long.');
   }
+}
+
+function isCorrectAnswer_(hint, answer) {
+  var normalizedAnswer = normalize_(answer);
+  var accepted = ACCEPTED_ANSWERS[String(hint)] || [];
+  return accepted.some(function(candidate) {
+    return normalizedAnswer.indexOf(normalize_(candidate)) !== -1;
+  });
+}
+
+function normalize_(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function clean_(value) {
