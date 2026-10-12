@@ -1,0 +1,322 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Escape Protocol Room 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: a lockdown-facility screen. Dark navy with a cold corridor light from the top right,
+   heavy condensed white and electric-blue headline, red rule lines, cipher tiles, stamped verdict. */
+:root {
+  --bg: #050c17;
+  --panel: #0a1627;
+  --panel-2: #0e1d33;
+  --fg: #f1f4f8;
+  --muted: #8ea0ba;
+  --blue: #3b8cff;
+  --blue-soft: #14305c;
+  --red: #e5383b;
+  --right: #38d996;
+  --line: #1c3354;
+  --font-display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  background:
+    radial-gradient(ellipse 55% 38% at 88% 0%, rgba(59, 140, 255, 0.28), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 0% 100%, rgba(229, 56, 59, 0.10), transparent 70%),
+    var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  padding-inline: 16px;
+  padding-block: 36px 56px;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+.wrap { width: 100%; max-width: 760px; margin-inline: auto; display: flex; flex-direction: column; gap: 30px; position: relative; min-width: 0; }
+.wheel {
+  position: absolute;
+  right: -90px;
+  top: 150px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, transparent 0 18px, rgba(59, 140, 255, 0.14) 18px 19px),
+    repeating-conic-gradient(from 0deg, rgba(59, 140, 255, 0.14) 0 1deg, transparent 1deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 72%);
+  mask-image: radial-gradient(circle, #000 55%, transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+.wrap > * { position: relative; z-index: 1; }
+.wrap > .wheel { position: absolute; z-index: 0; }
+
+.eyebrow { display: flex; align-items: center; gap: 14px; font-size: 0.8125rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--muted); flex-wrap: wrap; }
+.eyebrow::before { content: ""; width: 44px; height: 2px; background: var(--blue); }
+.eyebrow .pz { color: var(--red); font-weight: 600; letter-spacing: 0.28em; }
+
+.head { display: flex; gap: 18px; align-items: stretch; }
+.bar { flex: none; width: 4px; background: linear-gradient(var(--red) 0 45%, var(--blue) 45% 100%); border-radius: 2px; }
+h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.75rem, 12vw, 5.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+h1 .b { color: var(--blue); display: block; }
+.tag { margin: 0; color: var(--fg); font-weight: 600; font-size: 1.0625rem; }
+
+.stamp {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 2px solid var(--red);
+  padding: 2px 14px;
+  border-radius: 3px;
+  transform: rotate(-4deg);
+  opacity: 0.9;
+}
+
+.mission { display: flex; flex-direction: column; gap: 14px; border-left: 3px solid var(--red); padding-left: 20px; }
+.mission h2 { margin: 0; font-family: var(--font-display); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 1.5rem; }
+.meta { margin: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.9375rem; }
+.meta div { display: flex; flex-wrap: wrap; gap: 2px 12px; }
+.meta dt { flex: 0 0 5.5rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); font-weight: 600; padding-top: 3px; }
+.meta dd { margin: 0; flex: 1 1 14rem; min-width: 0; overflow-wrap: anywhere; color: var(--fg); }
+.meta .alert { color: var(--red); font-weight: 600; }
+
+.section-label { display: flex; align-items: center; gap: 14px; margin: 0 0 14px; font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; letter-spacing: 0.2em; text-transform: uppercase; }
+.section-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.lines { display: flex; flex-direction: column; gap: 12px; }
+.groups { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+.group { display: flex; flex-wrap: wrap; gap: 8px; }
+.sep { color: var(--red); font-family: var(--font-display); font-size: 1.75rem; line-height: 1; }
+.tile {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.75rem;
+  letter-spacing: 0.06em;
+  color: var(--blue);
+  background: var(--panel);
+  border: 1px solid var(--blue-soft);
+  border-radius: 4px;
+  min-width: 2.7rem;
+  padding: 4px 12px;
+  text-align: center;
+  line-height: 1.2;
+  box-shadow: 0 0 18px -6px rgba(59, 140, 255, 0.55), inset 0 -2px 0 var(--blue-soft);
+}
+
+.analyst { margin: 0; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--blue); border-radius: 4px; max-width: 64ch; overflow-wrap: anywhere; }
+.analyst b { display: block; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 4px; }
+
+form { display: flex; flex-direction: column; gap: 18px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 20px; }
+.line { display: flex; flex-direction: column; gap: 6px; }
+.line label { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+.line input {
+  font: inherit;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-bottom: 2px solid var(--blue);
+  border-radius: 4px;
+  padding: 12px 14px;
+  min-width: 0;
+  width: 100%;
+}
+.line input::placeholder { color: var(--muted); }
+.line input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+button {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--blue);
+  border: 0;
+  border-radius: 4px;
+  padding: 11px 30px;
+  cursor: pointer;
+  box-shadow: 0 8px 22px -8px rgba(59, 140, 255, 0.8);
+  transition: background 0.15s, transform 0.15s;
+}
+button:hover { background: #5ba0ff; }
+button:active { transform: translateY(1px); }
+button:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+
+.verdict {
+  margin: 0;
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 3px solid currentColor;
+  border-radius: 4px;
+  padding: 4px 18px;
+  transform: rotate(-3deg);
+  overflow-wrap: anywhere;
+}
+.verdict.correct { color: var(--right); }
+.verdict.wrong { color: var(--red); }
+.verdict.plain { color: var(--fg); font-family: var(--font-body); font-weight: 500; font-size: 1.0625rem; letter-spacing: 0.02em; text-transform: none; border: 1px dashed var(--muted); transform: none; }
+.note { margin: 0; border-left: 3px solid var(--red); padding: 4px 0 4px 16px; max-width: 62ch; overflow-wrap: anywhere; }
+.note b { display: block; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); font-weight: 600; }
+footer { font-size: 0.8125rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue); display: flex; align-items: center; gap: 14px; }
+footer::before { content: ""; width: 44px; height: 2px; background: var(--blue); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tile { animation: boot 0.4s ease-out backwards; animation-delay: calc(var(--i) * 60ms); }
+  @keyframes boot { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  .verdict:not([hidden]):not(.plain) { animation: thud 0.28s ease-out; }
+  @keyframes thud { from { transform: rotate(-3deg) scale(1.5); opacity: 0; } to { transform: rotate(-3deg) scale(1); opacity: 1; } }
+}
+.stage { display: flex; flex-direction: column; gap: 18px; }
+.stage .section-label { margin: 0; }
+.lead { margin: 0; max-width: 62ch; }
+.riddle { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.riddle h3 { margin: 0; display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 700; font-size: 1.375rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.riddle h3 span { display: inline-grid; place-items: center; width: 2rem; height: 2rem; background: var(--blue); color: #ffffff; border-radius: 4px; letter-spacing: 0; }
+.riddle p { margin: 0; max-width: 62ch; overflow-wrap: anywhere; }
+.riddle .wall { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.12em; color: var(--red); border: 2px dashed var(--red); border-radius: 4px; padding: 6px 14px; align-self: flex-start; }
+.equation { margin: 0; align-self: flex-start; font-family: var(--font-display); font-weight: 700; font-size: 1.75rem; letter-spacing: 0.1em; color: var(--blue); background: var(--panel); border: 1px solid var(--blue-soft); border-radius: 4px; padding: 10px 18px; box-shadow: 0 0 18px -6px rgba(59, 140, 255, 0.55); overflow-wrap: anywhere; }
+.equation b { display: block; font-family: var(--font-body); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+.final { border-top: 1px solid var(--line); padding-top: 26px; }
+form.check { align-self: stretch; }
+.group { max-width: 100%; }
+.tabs { display: flex; gap: 10px; }
+button.tabbtn { align-self: auto; font-size: 1rem; letter-spacing: 0.2em; padding: 8px 22px; color: var(--muted); background: transparent; border: 1px solid var(--line); box-shadow: none; }
+button.tabbtn:hover { background: var(--panel-2); color: var(--fg); }
+button.tabbtn[aria-pressed="true"] { color: #ffffff; background: var(--blue); border-color: var(--blue); }
+.room { display: flex; flex-direction: column; gap: 30px; min-width: 0; }
+.room[hidden] { display: none; }
+.sub { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); }
+.warn { margin: 0; color: var(--red); font-weight: 600; max-width: 62ch; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+thead th { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); font-weight: 600; background: var(--panel-2); }
+tbody th { font-family: var(--font-display); font-weight: 700; font-size: 1.125rem; letter-spacing: 0.08em; }
+tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+</style>
+
+<div class="wrap">
+  <div class="wheel" aria-hidden="true"></div>
+
+  <div class="room" id="room2">
+  <div class="eyebrow">Escape Protocol <span class="pz">Room 2</span></div>
+
+  <div class="head">
+    <div class="bar" aria-hidden="true"></div>
+    <h1>Orion <span class="b">System Initialization</span></h1>
+  </div>
+  <div class="stamp">Classified</div>
+
+  <section class="stage" aria-label="Classified research log">
+    <h2 class="section-label">Classified research log</h2>
+    <p class="warn">System warning: facility lock protocol active.</p>
+    <p class="lead">Unravel Dr. Vance's six coordinate vectors, L1 to L6, from the diagnostics below. Use them to extract the override password.</p>
+    <h3 class="sub">Diagnostic core metrics</h3>
+    <article class="riddle">
+      <h3><span>L1</span> The Geometry of Time</h3>
+      <p>Take the number of edges on a standard cube. Multiply by the number of cardinal directions on a compass. Add the only even prime number.</p>
+    </article>
+    <article class="riddle">
+      <h3><span>L2</span> The Caesar Fallacy</h3>
+      <p>If Julius Caesar shifted his alphabet by +3, what key shift value did he leave behind in the shadow of the total number of months in a year?</p>
+    </article>
+    <article class="riddle">
+      <h3><span>L3</span> The Echo Paradox</h3>
+      <p>I am the smallest positive integer that is also the smallest perfect number, plus the number of visible moons orbiting the Earth.</p>
+    </article>
+    <article class="riddle">
+      <h3><span>L4</span> The Binary Mirror</h3>
+      <p>Reflect the byte "1001". Add the total number of primary colours minus the number of non-zero digits in "3E8".</p>
+    </article>
+    <article class="riddle">
+      <h3><span>L5</span> The Enigma Rotor</h3>
+      <p>Count the letters in "CRYPTOGRAPHY". Subtract the number of vowels in "winter hunter wears three stars in a straight line for a belt", then subtract the number of vowels in "LOCKDOWN".</p>
+    </article>
+    <article class="riddle">
+      <h3><span>L6</span> The Clockwork Offset</h3>
+      <p>A 24-hour clock ticks down from midnight. Subtract the number of months in a year.</p>
+    </article>
+    <p class="equation"><b>Password calculation</b>K1 = sum of ASCII values of every letter in the extracted keyword (uppercase letters only)</p>
+  </section>
+
+  <section class="stage" aria-label="Thermodynamic matrix log">
+    <h2 class="section-label">Orion facility: thermodynamic matrix log #004</h2>
+    <p class="warn">Notice: three of the four trial logs below were forged by containment protocol failures. Identify the one authentic trial and extract its authorization index.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Trial</th><th scope="col">Temperature (&deg;C)</th><th scope="col">Pressure (P)</th><th scope="col">Output vector (R)</th><th scope="col">Core status</th></tr></thead>
+        <tbody><tr><th scope="row">Alpha</th><td>25</td><td>4</td><td>16</td><td>Stable</td></tr><tr><th scope="row">Beta</th><td>30</td><td>6</td><td>36</td><td>Nominal</td></tr><tr><th scope="row">Gamma</th><td>25</td><td>6</td><td>24</td><td>Locked</td></tr><tr><th scope="row">Delta</th><td>35</td><td>4</td><td>20</td><td>Critical</td></tr></tbody>
+      </table>
+    </div>
+    <p class="equation"><b>Authorization key</b>K2 = position of the authentic trial in the Greek alphabet</p>
+  </section>
+
+  <section class="stage final" aria-label="Final keycode">
+    <h2 class="section-label">Final keycode</h2>
+    <p class="equation"><b>Final equation</b>K1 &times; K2</p>
+    <form class="check" id="f4" autocomplete="off">
+      <div class="line">
+        <label for="in4">Enter final keycode</label>
+        <input id="in4" type="text" placeholder="Type your answer">
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <p class="verdict" id="r4" hidden></p>
+  </section>
+  </div>
+
+  <footer>Think // Solve // Escape</footer>
+</div>
+
+<script>
+/* Each stage: correct is the accepted answer (or an array of accepted answers).
+   A match shows "Access approved", anything else shows "Access denied". */
+var CASE = {
+  final2: "962"
+};
+
+
+function norm(s) { return String(s).trim().toLowerCase().replace(/\s+/g, " "); }
+
+function wire(formId, inputId, resultId, correct) {
+  var form = document.getElementById(formId);
+  var input = document.getElementById(inputId);
+  var result = document.getElementById(resultId);
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!norm(input.value)) { input.focus(); return; }
+    var ok = [].concat(correct).some(function (k) { return norm(k) === norm(input.value); });
+    result.hidden = false;
+    result.className = "verdict " + (ok ? "correct" : "wrong");
+    result.textContent = ok ? "Access approved" : "Access denied";
+  });
+}
+wire("f4", "in4", "r4", CASE.final2);
+
+</script>
+
+</body></html>
